@@ -17,7 +17,7 @@ npm install svelte-vatsim-stands
 
 2 example usages are availible
 
-- 1 A minimal example with a static source [src/routes/minimal/+page.svelte](src/routes/minimal/+page.svelte).
+- 1 A minimal example [src/routes/minimal/+page.svelte](src/routes/minimal/+page.svelte).
 - 2 With a custom tooltip defined [src/routes/+page.svelte](src/routes/+page.svelte).
 
 ### Stand source
