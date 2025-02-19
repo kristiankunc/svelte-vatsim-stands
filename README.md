@@ -18,7 +18,7 @@ npm install svelte-vatsim-stands
 2 example usages are availible
 
 - 1 A minimal example [src/routes/minimal/+page.svelte](src/routes/minimal/+page.svelte).
-- 2 With a custom tooltip defined [src/routes/+page.svelte](src/routes/+page.svelte).
+- 2 An example with a custom tooltip defined [src/routes/+page.svelte](src/routes/+page.svelte).
 
 ### Stand source
 
@@ -27,7 +27,7 @@ A publicly accessible txt file following the EuroScope sectorfile format is requ
 
 Empty lines and lines starting with `;` are ignored.
 
-Exapmle files can be seen in [static/test-stands.txt](static/test-stands.txt).
+Exapmle files can be seen in [static/test-stands](static/test-stands).
 
 ## Thresholds
 
