@@ -1,6 +1,6 @@
 # Svelte VATSIM Stands
 
-A Svelte component to displa VATSIM stand occupancy.
+A Svelte component to display VATSIM stand occupancy.
 
 ## Preview
 
