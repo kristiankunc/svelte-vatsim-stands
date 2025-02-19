@@ -19,7 +19,7 @@
 		tileUlr?: string;
 		sourcePath: string;
 		viewParams: ViewParams;
-		currentStand: StandData | null;
+		currentStand?: StandData | null;
 	} = $props();
 
 	useGeographic();
