@@ -3,7 +3,7 @@
 	import { Map, MapBrowserEvent } from "ol";
 	import TileLayer from "ol/layer/Tile.js";
 	import { XYZ } from "ol/source.js";
-	import { StandManager, type StandData, type ViewParams } from "$lib/stands.js";
+	import { StandManager, type StandData, type Thresholds, type ViewParams } from "$lib/stands.js";
 	import { useGeographic } from "ol/proj.js";
 	import { tileUrls } from "$lib/tiles.js";
 
@@ -14,16 +14,22 @@
 			center: [0, 0],
 			zoom: 2
 		},
-		currentStand = $bindable(null)
+		currentStand = $bindable(null),
+		thresholds = {
+			ktsMaxGroundSpeed: 1,
+			kmDistanceFromCenter: 10,
+			mStandOccupancyRadius: 40
+		}
 	}: {
 		tileUlr?: string;
 		sourcePath: string;
 		viewParams: ViewParams;
 		currentStand?: StandData | null;
+		thresholds?: Thresholds;
 	} = $props();
 
 	useGeographic();
-	const standManager = new StandManager(viewParams, sourcePath);
+	const standManager = new StandManager(viewParams, sourcePath, thresholds);
 
 	onMount(() => {
 		standManager.init();

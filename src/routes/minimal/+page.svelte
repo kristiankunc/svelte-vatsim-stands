@@ -3,13 +3,6 @@
 	import { tileUrls } from "$lib/tiles.js";
 </script>
 
-<!--
-Using the Map component to display the map:
- 	tileUlr: URL of the tile source (defaults to satellite view)
- 	viewParams: Initial view parameters {center: [longitude, latitude], zoom: number} (defaults to center of the world)
- 	sourcePath: Path to the stand data source accessible from the client (can be relative or absolute)
--->
-
 <Map
 	tileUlr={tileUrls.SATELLITE}
 	viewParams={{

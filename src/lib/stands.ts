@@ -14,6 +14,12 @@ export interface StandData {
 	occupied: boolean;
 }
 
+export interface Thresholds {
+	ktsMaxGroundSpeed: number;
+	kmDistanceFromCenter: number;
+	mStandOccupancyRadius: number;
+}
+
 class Stand {
 	name: string;
 	coordinate: Coordinate;
@@ -51,16 +57,18 @@ export class StandManager {
 	mapLayer: VectorLayer = new VectorLayer();
 	mapSource: VectorSource = new VectorSource();
 	view: View | undefined;
+	thresholds: Thresholds;
 
 	/**
 	 * Creates a new instance.
 	 * @param viewParams - Parameters for configuring the view, including center coordinates and zoom level
 	 * @param sourcePath - Path to the source file
 	 */
-	constructor(viewParams: ViewParams, sourcePath: string) {
+	constructor(viewParams: ViewParams, sourcePath: string, thresholds: Thresholds) {
 		this.viewParams = viewParams;
 		this.sourcePath = sourcePath;
 		this.fileName = sourcePath.split("/").pop()?.split(".")[0] ?? "";
+		this.thresholds = thresholds;
 
 		this.mapLayer.setSource(this.mapSource);
 
@@ -219,11 +227,14 @@ export class StandManager {
 		const pilots = (await response.json()).pilots;
 
 		for (const pilot of pilots) {
-			if (pilot.groundspeed > 1 || pilot.callsign.includes("_")) continue;
+			if (pilot.groundspeed > this.thresholds.ktsMaxGroundSpeed || pilot.callsign.includes("_")) continue;
 
 			if (pilot.latitude && pilot.longitude) {
-				// TODO: change to 10 km
-				if (StandManager.getKmDistance([pilot.longitude, pilot.latitude], this.viewParams.center) > 1000) continue;
+				if (
+					StandManager.getKmDistance([pilot.longitude, pilot.latitude], this.viewParams.center) >
+					this.thresholds.kmDistanceFromCenter
+				)
+					continue;
 
 				this.pilots.push(new Pilot(pilot.callsign, [pilot.longitude, pilot.latitude]));
 			}
@@ -298,7 +309,7 @@ export class StandManager {
 			const closestStands = this.getClosestStands(pilot.coordinate);
 
 			for (const stand of closestStands) {
-				if (StandManager.getKmDistance(pilot.coordinate, stand.coordinate) < 0.04) {
+				if (StandManager.getKmDistance(pilot.coordinate, stand.coordinate) < this.thresholds.mStandOccupancyRadius / 1000) {
 					stand.occupied = true;
 				}
 			}
