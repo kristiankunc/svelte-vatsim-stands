@@ -1,6 +1,6 @@
 {
 	"name": "svelte-vatsim-stands",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"description": "A SvelteKit component for displaying VATSIM stand occupancy",
 	"author": "Kristian Kunc",
 	"repository": {
