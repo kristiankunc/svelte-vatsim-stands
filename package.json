@@ -7,6 +7,13 @@
 		"type": "git",
 		"url": "git+https://github.com/kristiankunc/svelte-vatsim-stands.git"
 	},
+	"keywords": [
+		"vatsim",
+		"vatsim-stands",
+		"svelte",
+		"sveltekit",
+		"component"
+	],
 	"license": "MIT",
 	"scripts": {
 		"dev": "vite dev",
