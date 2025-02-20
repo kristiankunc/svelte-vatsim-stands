@@ -29,6 +29,10 @@ Using the Map component to display the map:
     bind:currentStand: Binding to the current stand data
 -->
 
+<script lang="ts">
+    import { Map, tileUrls, type StandData } from "svelte-vatsim-stands";
+</script>
+
 <Map
     tileUlr={tileUrls.SATELLITE}
     viewParams={{
@@ -49,10 +53,8 @@ Using the Map component to display the map:
 
  ```svelte
 <script lang="ts">
-    import Map from "$lib/map.svelte";
-    import { tileUrls } from "$lib/tiles.js";
+    import { Map, tileUrls, type StandData } from "svelte-vatsim-stands";
 </script>
-
 <Map
     tileUlr={tileUrls.SATELLITE}
     viewParams={{
@@ -67,9 +69,7 @@ Using the Map component to display the map:
 
 ```svelte
 <script lang="ts">
-    import Map from "$lib/map.svelte";
-    import { tileUrls } from "$lib/tiles.js";
-    import type { StandData } from "$lib/stands.js";
+    import { Map, tileUrls, type StandData } from "svelte-vatsim-stands";
 
     let currentStand: StandData | null = $state(null);
     let mouseX = $state(0);
@@ -112,7 +112,7 @@ Exapmle files can be seen in [static/test-stands](static/test-stands).
 
 ## Thresholds
 
-A few thresholds are defined
+A few default thresholds are defined that can be overriden with the `thresholds` param
 
 Pilots with the following conditions are considered not to be at the airport:
 
