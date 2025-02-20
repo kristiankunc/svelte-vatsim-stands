@@ -14,8 +14,6 @@ npm install svelte-vatsim-stands
 
 ## Usage
 
-2 example usages are availible
-
 1. A minimal example
 
  ```svelte
