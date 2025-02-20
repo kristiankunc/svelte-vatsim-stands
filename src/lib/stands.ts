@@ -12,6 +12,7 @@ import Stroke from "ol/style/Stroke.js";
 export interface StandData {
 	name: string;
 	occupied: boolean;
+	callsign?: string;
 }
 
 export interface Thresholds {
@@ -24,6 +25,7 @@ class Stand {
 	name: string;
 	coordinate: Coordinate;
 	occupied: boolean = false;
+	pilot?: Pilot;
 
 	constructor(name: string, coordinate: Coordinate) {
 		this.name = name;
@@ -311,6 +313,7 @@ export class StandManager {
 			for (const stand of closestStands) {
 				if (StandManager.getKmDistance(pilot.coordinate, stand.coordinate) < this.thresholds.mStandOccupancyRadius / 1000) {
 					stand.occupied = true;
+					stand.pilot = pilot;
 				}
 			}
 		}

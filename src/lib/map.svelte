@@ -56,7 +56,8 @@
 			if (stand)
 				currentStand = {
 					name: stand.name,
-					occupied: stand.occupied
+					occupied: stand.occupied,
+					callsign: stand.pilot?.callsign
 				};
 		});
 

@@ -17,8 +17,10 @@
 
 {#if currentStand}
 	<div class="fixed z-[1000] rounded-lg bg-white p-4 shadow-lg" style="top: {mouseY}px; left: {mouseX}px;">
-		<p>Stand: {currentStand.name}</p>
-		<p>Available: {!currentStand.occupied ? "✅" : "❌"}</p>
+		<p>Stand <span class="font-bold">{currentStand.name}</span>{!currentStand.occupied ? " ✅" : " ❌"}</p>
+		{#if currentStand.occupied}
+			<p>Occupied by {currentStand.callsign}</p>
+		{/if}
 	</div>
 {/if}
 
