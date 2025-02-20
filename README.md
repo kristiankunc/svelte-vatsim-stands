@@ -45,7 +45,7 @@ Using the Map component to display the map:
 />
 ```
 
-1. A minimal example
+1. Minimal example
 
  ```svelte
 <script lang="ts">
@@ -63,7 +63,7 @@ Using the Map component to display the map:
 />
 ```
 
-2.An example with a custom tooltip defined
+2. Example with a tooltip definded
 
 ```svelte
 <script lang="ts">
