@@ -98,9 +98,12 @@ export class StandManager {
 	 * 3. Refreshes the map layer with new information
 	 */
 	async update() {
+		document.body.style.cursor = "wait";
 		await this.fetchPilots();
 		this.updateStandOcupancy();
 		this.updateMapLayer();
+
+		document.body.style.cursor = "default";
 	}
 
 	/**

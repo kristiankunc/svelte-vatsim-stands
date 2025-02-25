@@ -30,6 +30,7 @@
 
 	useGeographic();
 	const standManager = new StandManager(viewParams, sourcePath, thresholds);
+	let updateInterval: number;
 
 	onMount(() => {
 		standManager.init();
@@ -61,14 +62,31 @@
 				};
 		});
 
-		const interval = setInterval(() => {
-			standManager.update();
-		}, 20000);
-
 		return () => {
-			clearInterval(interval);
+			clearInterval(updateInterval);
 		};
 	});
 </script>
+
+<svelte:window
+	on:visibilitychange={() => {
+		switch (document.visibilityState) {
+			case "visible":
+				console.log("starting interval");
+				standManager.update();
+				updateInterval = setInterval(() => {
+					standManager.update();
+				}, 20000);
+
+				break;
+
+			case "hidden":
+				console.log("clearing interval");
+				clearInterval(updateInterval);
+
+				break;
+		}
+	}}
+/>
 
 <div id="map" class="h-[100vh] w-full"></div>
