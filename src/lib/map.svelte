@@ -72,8 +72,8 @@
 	on:visibilitychange={() => {
 		switch (document.visibilityState) {
 			case "visible":
-				console.log("starting interval");
 				standManager.update();
+
 				updateInterval = setInterval(() => {
 					standManager.update();
 				}, 20000);
@@ -81,7 +81,6 @@
 				break;
 
 			case "hidden":
-				console.log("clearing interval");
 				clearInterval(updateInterval);
 
 				break;
