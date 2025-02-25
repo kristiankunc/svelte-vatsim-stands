@@ -228,6 +228,8 @@ export class StandManager {
 
 		const pilots = (await response.json()).pilots;
 
+		this.pilots = [];
+
 		for (const pilot of pilots) {
 			if (pilot.groundspeed > this.thresholds.ktsMaxGroundSpeed || pilot.callsign.includes("_")) continue;
 
@@ -270,14 +272,29 @@ export class StandManager {
 			const value = stand[1];
 			const delta = 0.0002;
 
-			const standFeature = new Feature({
-				geometry: fromExtent([
-					value.coordinate[0] - delta,
-					value.coordinate[1] - delta / 2,
-					value.coordinate[0] + delta,
-					value.coordinate[1] + delta / 2
-				])
-			});
+			let standFeature = this.mapSource.getFeatureById(value.name);
+
+			if (!standFeature) {
+				standFeature = new Feature({
+					geometry: fromExtent([
+						value.coordinate[0] - delta,
+						value.coordinate[1] - delta / 2,
+						value.coordinate[0] + delta,
+						value.coordinate[1] + delta / 2
+					])
+				});
+				standFeature.setId(value.name);
+				this.mapSource.addFeature(standFeature);
+			} else {
+				standFeature.setGeometry(
+					fromExtent([
+						value.coordinate[0] - delta,
+						value.coordinate[1] - delta / 2,
+						value.coordinate[0] + delta,
+						value.coordinate[1] + delta / 2
+					])
+				);
+			}
 
 			const fillColor = value.occupied ? "rgba(255, 99, 71, 0.6)" : "rgba(144, 238, 144, 0.6)";
 			const strokeColor = value.occupied ? "rgba(220, 20, 60, 0.8)" : "rgba(34, 139, 34, 0.8)";
@@ -293,27 +310,25 @@ export class StandManager {
 					})
 				})
 			);
-
-			this.mapSource.addFeature(standFeature);
-
-			standFeature.setId(value.name);
 		}
 	}
 
 	/**
 	 * Updates the occupancy status of stands based on pilot positions.
 	 * Iterates through all pilots and marks stands as occupied if a pilot
-	 * is within 0.04 kilometers of the stand's coordinate.
+	 * is within *threshold* meters of the stand's coordinate.
 	 * @private
 	 */
 	private updateStandOcupancy() {
 		for (const pilot of this.pilots) {
 			const closestStands = this.getClosestStands(pilot.coordinate);
-
 			for (const stand of closestStands) {
 				if (StandManager.getKmDistance(pilot.coordinate, stand.coordinate) < this.thresholds.mStandOccupancyRadius / 1000) {
 					stand.occupied = true;
 					stand.pilot = pilot;
+				} else {
+					stand.occupied = false;
+					stand.pilot = undefined;
 				}
 			}
 		}
