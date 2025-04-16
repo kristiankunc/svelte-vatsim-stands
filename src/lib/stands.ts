@@ -8,17 +8,18 @@ import VectorSource from "ol/source/Vector.js";
 import { env } from "$env/dynamic/public";
 import { fromExtent } from "ol/geom/Polygon.js";
 import Stroke from "ol/style/Stroke.js";
+import aircraft_data from "$lib/data/aircraft_data.json" with { type: "json" };
 
 export interface StandData {
 	name: string;
 	occupied: boolean;
-	callsign?: string;
+	pilot?: Pilot;
 }
 
 export interface Thresholds {
 	ktsMaxGroundSpeed: number;
 	kmDistanceFromCenter: number;
-	mStandOccupancyRadius: number;
+	ftDefaultWingSpan: number;
 }
 
 class Stand {
@@ -36,10 +37,12 @@ class Stand {
 class Pilot {
 	callsign: string;
 	coordinate: Coordinate;
+	aircraftIcao?: string;
 
-	constructor(callsign: string, coordinate: Coordinate) {
+	constructor(callsign: string, coordinate: Coordinate, aircraftIcao?: string) {
 		this.callsign = callsign;
 		this.coordinate = coordinate;
+		this.aircraftIcao = aircraftIcao;
 	}
 }
 
@@ -54,6 +57,7 @@ export class StandManager {
 	private pilots: Pilot[] = [];
 	private stands: Map<string, Stand> = new Map();
 	private viewParams: ViewParams;
+	private aircraftWingspan: Map<string, number> = new Map(Object.entries(aircraft_data as unknown as Record<string, number>));
 
 	fileName: string;
 	mapLayer: VectorLayer = new VectorLayer();
@@ -98,12 +102,12 @@ export class StandManager {
 	 * 3. Refreshes the map layer with new information
 	 */
 	async update() {
-		document.body.style.cursor = "wait";
+		//document.body.style.cursor = "wait";
 		await this.fetchPilots();
 		this.updateStandOcupancy();
 		this.updateMapLayer();
 
-		document.body.style.cursor = "default";
+		//document.body.style.cursor = "default";
 	}
 
 	/**
@@ -243,7 +247,7 @@ export class StandManager {
 				)
 					continue;
 
-				this.pilots.push(new Pilot(pilot.callsign, [pilot.longitude, pilot.latitude]));
+				this.pilots.push(new Pilot(pilot.callsign, [pilot.longitude, pilot.latitude], pilot.flight_plan?.aircraft_short));
 			}
 		}
 	}
@@ -319,19 +323,24 @@ export class StandManager {
 	/**
 	 * Updates the occupancy status of stands based on pilot positions.
 	 * Iterates through all pilots and marks stands as occupied if a pilot
-	 * is within *threshold* meters of the stand's coordinate.
+	 * is within the wingspand distance of the stand.
 	 * @private
 	 */
 	private updateStandOcupancy() {
+		for (const stand of this.stands.values()) {
+			stand.occupied = false;
+			stand.pilot = undefined;
+		}
+
 		for (const pilot of this.pilots) {
+			const wingspan = this.aircraftWingspan.get(pilot.aircraftIcao || "") || this.thresholds.ftDefaultWingSpan;
+			const radius = StandManager.ft2m(wingspan) / 2;
 			const closestStands = this.getClosestStands(pilot.coordinate);
 			for (const stand of closestStands) {
-				if (StandManager.getKmDistance(pilot.coordinate, stand.coordinate) < this.thresholds.mStandOccupancyRadius / 1000) {
+				const distance = StandManager.getKmDistance(pilot.coordinate, stand.coordinate);
+				if (distance < radius / 1000) {
 					stand.occupied = true;
 					stand.pilot = pilot;
-				} else {
-					stand.occupied = false;
-					stand.pilot = undefined;
 				}
 			}
 		}
@@ -382,5 +391,14 @@ export class StandManager {
 	 */
 	private static deg2rad(deg: number): number {
 		return deg * (Math.PI / 180);
+	}
+
+	/**
+	 *
+	 * @param ft - Feet
+	 * @returns The feet converted to meters
+	 */
+	private static ft2m(ft: number): number {
+		return ft * 0.3048;
 	}
 }

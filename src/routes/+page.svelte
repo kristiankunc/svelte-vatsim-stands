@@ -19,7 +19,7 @@
 	<div class="fixed z-[1000] rounded-lg bg-white p-4 shadow-lg" style="top: {mouseY}px; left: {mouseX}px;">
 		<p>Stand <span class="font-bold">{currentStand.name}</span>{!currentStand.occupied ? " ✅" : " ❌"}</p>
 		{#if currentStand.occupied}
-			<p>Occupied by {currentStand.callsign}</p>
+			<p>Occupied by {currentStand.pilot?.callsign}</p>
 		{/if}
 	</div>
 {/if}
@@ -34,7 +34,7 @@
 	thresholds={{
 		ktsMaxGroundSpeed: 1,
 		kmDistanceFromCenter: 10,
-		mStandOccupancyRadius: 40
+		ftDefaultWingSpan: 50
 	}}
 	bind:currentStand
 />

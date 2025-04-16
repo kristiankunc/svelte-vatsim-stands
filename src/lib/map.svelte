@@ -18,7 +18,7 @@
 		thresholds = {
 			ktsMaxGroundSpeed: 1,
 			kmDistanceFromCenter: 10,
-			mStandOccupancyRadius: 40
+			ftDefaultWingSpan: 50
 		}
 	}: {
 		tileUlr?: string;
@@ -58,7 +58,7 @@
 				currentStand = {
 					name: stand.name,
 					occupied: stand.occupied,
-					callsign: stand.pilot?.callsign
+					pilot: stand.pilot
 				};
 		});
 

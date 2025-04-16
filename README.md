@@ -19,11 +19,11 @@ Component parameters
 ```svelte
 <!--
 Using the Map component to display the map:
- 	tileUlr: URL of the tile source 
+	tileUlr: URL of the tile source 
     (defaults to satellite view)
- 	viewParams: Initial view parameters 
+	viewParams: Initial view parameters 
     {center: [longitude, latitude], zoom: number} (defaults to center of the world)
- 	sourcePath: Path to the stand data source accessible from the client 
+	sourcePath: Path to the stand data source accessible from the client 
     (can be relative or absolute)
     thresholds: Thresholds for stand occupancy and pilot distance
     bind:currentStand: Binding to the current stand data
@@ -41,9 +41,9 @@ Using the Map component to display the map:
     }}
     sourcePath="/test-stands/EETN.txt"
     thresholds={{
-        ktsMaxGroundSpeed: 15,
-        kmDistanceFromCenter: 5,
-        mStandOccupancyRadius: 35
+        ktsMaxGroundSpeed: 1,
+        kmDistanceFromCenter: 10,
+        ftDefaultWingSpan: 50
     }}
     bind:currentStand
 />
@@ -65,7 +65,7 @@ Using the Map component to display the map:
 />
 ```
 
-2. Example with a tooltip definded
+2. Example with a tooltip defined
 
 ```svelte
 <script lang="ts">
@@ -87,7 +87,7 @@ Using the Map component to display the map:
     <div class="fixed z-[1000] rounded-lg bg-white p-4 shadow-lg" style="top: {mouseY}px; left: {mouseX}px;">
         <p>Stand <span class="font-bold">{currentStand.name}</span>{!currentStand.occupied ? " ✅" : " ❌"}</p>
         {#if currentStand.occupied}
-            <p>Occupied by {currentStand.callsign}</p>
+            <p>Occupied by {currentStand.pilot?.callsign}</p>
         {/if}
     </div>
 {/if}
@@ -110,16 +110,16 @@ A publicly accessible txt file following the EuroScope sectorfile format is requ
 
 Empty lines and lines starting with `;` are ignored.
 
-Exapmle files can be seen in [static/test-stands](static/test-stands).
+Example files can be seen in [static/test-stands](static/test-stands).
 
 ## Thresholds
 
-A few default thresholds are defined that can be overriden with the `thresholds` param
+A few default thresholds are defined that can be overridden with the `thresholds` param
 
 Pilots with the following conditions are considered not to be at the airport:
 
 - Ground speed greater than **1**.
-- Callsing includes `_`.
+- Callsign includes `_`.
 - Further than **10km** from the defined centerpoint.
 
 All stands within **40m** of the pilot are considered occupied.
