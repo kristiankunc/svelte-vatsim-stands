@@ -122,4 +122,4 @@ Pilots with the following conditions are considered not to be at the airport:
 - Callsign includes `_`.
 - Further than **10km** from the defined centerpoint.
 
-All stands within **40m** of the pilot are considered occupied.
+To deem a stand occupied, they must be within a wingspan (ftDefaultWingSpan as fallback) distance of the stand.
