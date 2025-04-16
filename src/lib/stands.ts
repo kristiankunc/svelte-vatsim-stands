@@ -104,7 +104,7 @@ export class StandManager {
 	async update() {
 		//document.body.style.cursor = "wait";
 		await this.fetchPilots();
-		this.updateStandOcupancy();
+		this.updateStandOccupancy();
 		this.updateMapLayer();
 
 		//document.body.style.cursor = "default";
@@ -326,7 +326,7 @@ export class StandManager {
 	 * is within the wingspand distance of the stand.
 	 * @private
 	 */
-	private updateStandOcupancy() {
+	private updateStandOccupancy() {
 		for (const stand of this.stands.values()) {
 			stand.occupied = false;
 			stand.pilot = undefined;
