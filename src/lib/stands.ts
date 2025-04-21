@@ -5,7 +5,6 @@ import VectorLayer from "ol/layer/Vector.js";
 import Fill from "ol/style/Fill.js";
 import Style from "ol/style/Style.js";
 import VectorSource from "ol/source/Vector.js";
-import { env } from "$env/dynamic/public";
 import { fromExtent } from "ol/geom/Polygon.js";
 import Stroke from "ol/style/Stroke.js";
 import aircraft_data from "$lib/data/aircraft_data.json" with { type: "json" };
@@ -22,7 +21,7 @@ export interface Thresholds {
 	ftDefaultWingSpan: number;
 }
 
-class Stand {
+export class Stand {
 	name: string;
 	coordinate: Coordinate;
 	occupied: boolean = false;
@@ -34,7 +33,7 @@ class Stand {
 	}
 }
 
-class Pilot {
+export class Pilot {
 	callsign: string;
 	coordinate: Coordinate;
 	aircraftIcao?: string;
@@ -56,7 +55,7 @@ export class StandManager {
 	private sourcePath: string;
 	private pilots: Pilot[] = [];
 	private stands: Map<string, Stand> = new Map();
-	private viewParams: ViewParams;
+	public readonly viewParams: ViewParams;
 	private aircraftWingspan: Map<string, number> = new Map(Object.entries(aircraft_data as unknown as Record<string, number>));
 
 	fileName: string;
@@ -146,10 +145,12 @@ export class StandManager {
 
 		const data = await response.text();
 
+		const isDevelopment = process.env.PUBLIC_NODE_ENV === "development" || true;
+
 		for (const line of data.split("\n")) {
 			if (line.trim() === "" || line.startsWith(";")) continue;
 
-			if (env.PUBLIC_NODE_ENV === "development") {
+			if (isDevelopment) {
 				if (line.trim() === "END") break;
 			}
 
@@ -265,7 +266,9 @@ export class StandManager {
 	private updateMapLayer() {
 		this.mapSource.clear();
 
-		if (env.PUBLIC_NODE_ENV === "development") {
+		const isDevelopment = process.env.PUBLIC_NODE_ENV === "development" || true;
+
+		if (isDevelopment) {
 			for (const pilot of this.pilots) {
 				const pilotFeature = new Feature({
 					geometry: new Point(pilot.coordinate)
