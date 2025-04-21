@@ -15,7 +15,22 @@ jobs:
         with:
           node-version: "20.x"
           registry-url: "https://registry.npmjs.org"
+
       - run: npm ci
+
+      - name: Run linter
+        run: npm run lint
+        continue-on-error: false
+
+      - name: Run tests
+        run: npm test
+        continue-on-error: false
+
+      - name: Delete tag if linter or tests fail
+        if: failure()
+        run: |
+          TAG=${GITHUB_REF#refs/tags/}
+          git push --delete origin $TAG
 
       - name: Update version in package.json
         run: |
