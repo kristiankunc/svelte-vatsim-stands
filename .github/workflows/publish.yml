@@ -26,11 +26,15 @@ jobs:
         run: npm test
         continue-on-error: false
 
-      - name: Delete tag if linter or tests fail
+      - name: Delete tag and GitHub release if linter or tests fail
         if: failure()
         run: |
           TAG=${GITHUB_REF#refs/tags/}
+          RELEASE_ID=$(gh release list --tag $TAG --json id --jq '.[0].id')
+          if [ -n "$RELEASE_ID" ]; then gh release delete $RELEASE_ID --yes; fi
           git push --delete origin $TAG
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Update version in package.json
         run: |
