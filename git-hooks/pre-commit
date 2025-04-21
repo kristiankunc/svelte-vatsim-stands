@@ -1,0 +1,8 @@
+#!/bin/bash
+
+echo "Running pre-commit hook..."
+npm run format
+if [ $? -ne 0 ]; then
+    echo "Pre-commit hook failed. Please fix the issues and try again."
+    exit 1
+fi
