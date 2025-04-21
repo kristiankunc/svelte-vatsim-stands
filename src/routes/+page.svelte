@@ -16,7 +16,7 @@
 <svelte:window on:mousemove={handleMouseMove} />
 
 {#if currentStand}
-	<div class="fixed z-[1000] rounded-lg bg-white p-4 shadow-lg" style="top: {mouseY}px; left: {mouseX}px;">
+	<div class="fixed z-[1000] rounded-lg bg-white p-4 shadow-lg" style="top: {mouseY + 10}px; left: {mouseX + 10}px;">
 		<p>Stand <span class="font-bold">{currentStand.name}</span>{!currentStand.occupied ? " ✅" : " ❌"}</p>
 		{#if currentStand.occupied}
 			<p>Occupied by {currentStand.pilot?.callsign}</p>
