@@ -30,7 +30,7 @@
 
 	useGeographic();
 	const standManager = new StandManager(viewParams, sourcePath, thresholds);
-	let updateInterval: number;
+	let updateInterval: ReturnType<typeof setInterval>;
 
 	onMount(() => {
 		standManager.init();
