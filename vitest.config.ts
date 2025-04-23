@@ -12,8 +12,7 @@ export default defineConfig({
 			$components: "/src/components",
 			$stores: "/src/stores",
 			$utils: "/src/utils",
-			$assets: "/src/assets",
-			$env: "/src/env"
+			$assets: "/src/assets"
 		}
 	}
 });
