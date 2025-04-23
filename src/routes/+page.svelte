@@ -27,10 +27,10 @@
 <Map
 	tileUlr={tileUrls.SATELLITE}
 	viewParams={{
-		center: [24.8085431, 59.4153153],
-		zoom: 16.25
+		center: [-0.458491, 51.471325],
+		zoom: 15
 	}}
-	sourcePath="/test-stands/EETN.txt"
+	sourcePath="/test-stands/EGLL.txt"
 	thresholds={{
 		ktsMaxGroundSpeed: 1,
 		kmDistanceFromCenter: 10,

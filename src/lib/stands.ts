@@ -86,8 +86,12 @@ export class StandManager {
 		this.view = new View({
 			center: viewParams.center,
 			zoom: viewParams.zoom,
-			maxZoom: viewParams.zoom + 2,
-			minZoom: viewParams.zoom - 2
+			...(isDev
+				? {}
+				: {
+						maxZoom: viewParams.zoom + 2,
+						minZoom: viewParams.zoom - 2
+					})
 		});
 	}
 
