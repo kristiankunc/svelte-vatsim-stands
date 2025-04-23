@@ -8,6 +8,12 @@ import VectorSource from "ol/source/Vector.js";
 import { fromExtent } from "ol/geom/Polygon.js";
 import Stroke from "ol/style/Stroke.js";
 import aircraft_data from "$lib/data/aircraft_data.json" with { type: "json" };
+import { PUBLIC_NODE_ENV } from "$env/static/public";
+
+const isDev = PUBLIC_NODE_ENV === "development" || false;
+if (isDev) {
+	console.log("Development mode");
+}
 
 export interface StandData {
 	name: string;
@@ -147,12 +153,10 @@ export class StandManager {
 
 		const data = await response.text();
 
-		const isDevelopment = import.meta.env.PUBLIC_NODE_ENV === "development" || true;
-
 		for (const line of data.split("\n")) {
 			if (line.trim() === "" || line.startsWith(";")) continue;
 
-			if (isDevelopment) {
+			if (isDev) {
 				if (line.trim() === "END") break;
 			}
 
@@ -268,9 +272,7 @@ export class StandManager {
 	private updateMapLayer() {
 		this.mapSource.clear();
 
-		const isDevelopment = import.meta.env.PUBLIC_NODE_ENV === "development" || true;
-
-		if (isDevelopment) {
+		if (isDev) {
 			for (const pilot of this.pilots) {
 				const pilotFeature = new Feature({
 					geometry: new Point(pilot.coordinate)
