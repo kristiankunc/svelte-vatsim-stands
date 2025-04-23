@@ -147,7 +147,7 @@ export class StandManager {
 
 		const data = await response.text();
 
-		const isDevelopment = process.env.PUBLIC_NODE_ENV === "development" || true;
+		const isDevelopment = import.meta.env.PUBLIC_NODE_ENV === "development" || true;
 
 		for (const line of data.split("\n")) {
 			if (line.trim() === "" || line.startsWith(";")) continue;
@@ -268,7 +268,7 @@ export class StandManager {
 	private updateMapLayer() {
 		this.mapSource.clear();
 
-		const isDevelopment = process.env.PUBLIC_NODE_ENV === "development" || true;
+		const isDevelopment = import.meta.env.PUBLIC_NODE_ENV === "development" || true;
 
 		if (isDevelopment) {
 			for (const pilot of this.pilots) {
