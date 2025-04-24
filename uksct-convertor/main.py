@@ -89,10 +89,11 @@ def parse_lines(lines: list[str]) -> list[str]:
 
 def dump_to_out_file(lines: list[str]) -> None:
     os.makedirs("out", exist_ok=True)
-    with open(f"out/{datetime.now().strftime('%d-%m-%Y_%H-%M-%S')}.txt", "w") as f:
+    output_filename = f"out/{datetime.now().strftime('%d-%m-%Y_%H-%M-%S')}.txt"
+    with open(output_filename, "w") as f:
         for line in lines:
             f.write(f"{line}\n")
-    print(f"Parsed lines saved to out/{int(os.path.getmtime(__file__))}.txt")
+    print(f"Parsed lines saved to {output_filename}")
 
 
 if __name__ == "__main__":
